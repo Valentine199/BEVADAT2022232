@@ -1,3 +1,4 @@
+import numpy as np
 # Create a function that decides if a list contains any odd numbers.
 # return type: bool
 # function name must be: contains_odd
@@ -12,6 +13,11 @@ def contains_odd(input_list: list):
 # return type: list
 # function name must be: is_odd
 # input parameters: input_list
+def is_odd(input_list: list):
+    mask = [x % 2 != 0 for x in input_list]
+    return mask
+
+
 
 
 # Create a function that accepts 2 lists of integers and returns their element wise sum.
@@ -19,6 +25,11 @@ def contains_odd(input_list: list):
 # return type: list
 # function name must be: element_wise_sum
 # input parameters: input_list_1, input_list_2
+def element_wise_sum(input_list_1: list, input_list_2: list):
+    np_arr1 = np.array(input_list_1)
+    np_arr2 = np.array(input_list_2)
+    element_wise = np_arr1 + np_arr2
+    return list(element_wise)
 
 
 # Create a function that accepts a dictionary and returns its items as a list of tuples
@@ -26,6 +37,9 @@ def contains_odd(input_list: list):
 # return type: list
 # function name must be: dict_to_list
 # input parameters: input_dict
+def dict_to_list(input_dict: dict):
+    result_list = [(key, value) for key, value in input_dict.items()]
+    return result_list
 
 
 # If all the functions are created convert this notebook into a .py file and push to your repo
