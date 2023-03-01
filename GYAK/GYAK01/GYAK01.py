@@ -18,8 +18,6 @@ def is_odd(input_list: list):
     return mask
 
 
-
-
 # Create a function that accepts 2 lists of integers and returns their element wise sum.
 # (return should be a list)
 # return type: list
@@ -40,6 +38,3 @@ def element_wise_sum(input_list_1: list, input_list_2: list):
 def dict_to_list(input_dict: dict):
     result_list = [(key, value) for key, value in input_dict.items()]
     return result_list
-
-
-# If all the functions are created convert this notebook into a .py file and push to your repo
