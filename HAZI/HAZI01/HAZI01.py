@@ -102,6 +102,26 @@ def transpose(input_list: list):
 # return type: list
 # function name must be: split_into_chunks
 # input parameters: input_list,chunk_size
+def split_into_chunks(input_list: list, chunk_size: int):
+    resized_list = list()
+    size_now = 0
+    list_idx = 0
+    resized_list.append(list())
+    for inner_list in input_list:
+        for x in inner_list:
+            if size_now == chunk_size:
+                list_idx += 1
+                resized_list.append(list())
+                resized_list[list_idx].append(x)
+                size_now = 1
+            else:
+                resized_list[list_idx].append(x)
+                size_now += 1
+
+    return resized_list
+
+
+
 
 
 # Create a function that can merge n dictionaries
@@ -147,6 +167,3 @@ def mean_key_value(input_dict: dict):
         result_dict[key] = avarage
 
     return result_dict
-
-
-# If all the functions are created convert this notebook into a .py file and push to your repo
