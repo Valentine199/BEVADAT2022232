@@ -69,7 +69,7 @@ def reverse_tuples(input_list: tuple):
 # return type: list
 # fucntion name must be: remove_tuplicates
 # input parameters: input_list
-def remove_tuplicates(input_list: list):
+def remove_duplicates(input_list: list):
     uniques = list()
     for i in range(len(input_list)):
         if input_list[i] not in uniques:
