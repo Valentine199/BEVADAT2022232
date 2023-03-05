@@ -3,17 +3,20 @@
 # return type: list
 # function name must be: subset
 # input parameters: input_list,start_index,end_index
-def subset(input_list: list, start_index: int, end_index: int):
+def subset(input_list: list, start_index: int, end_index: int) -> list:
     return input_list[start_index: end_index]
 
 
-# Create a function that returns every nth element of a list.
-# return type: list
-# function name must be: every_nth
-# input parameters: input_list,step_size
-def every_nth(input_list: list, step_size: int):
+#Készíts egy függvényt ami egy listát vár paraméterként és ennek a listának minden n-edik elemét adja vissza.
+#Paraméterként lehessen állítani azt hogy hanyadik elemeket szeretnénk viszakapni.
+#NOTE: a 0. elem is legyen benne
+#Egy példa a bemenetre: input_list=[1,2,3,4,5,6,7,8,9], n=3
+#Egy példa a kimenetre: [1,4,7]
+#return type: list
+#függvény neve legyen: every_nth
+def every_nth(input_list: list, step_size: int) -> list:
     filtered = list()
-    for i in range(step_size-1, len(input_list), step_size):
+    for i in range(0, len(input_list), step_size):
         filtered.append(input_list[i])
     return filtered
 
@@ -22,7 +25,7 @@ def every_nth(input_list: list, step_size: int):
 # return type: bool
 # function name must be: unique
 # input parameters: input_list
-def unique(input_list: list):
+def unique(input_list: list) -> bool:
     uniques = list()
     for x in input_list:
         if x not in uniques:
@@ -35,7 +38,7 @@ def unique(input_list: list):
 # return type: list
 # fucntion name must be: flatten
 # input parameters: input_list
-def flatten(input_list: list):
+def flatten(input_list: list) -> list:
     flat_list = list()
     for nest in input_list:
         for x in nest:
@@ -47,29 +50,33 @@ def flatten(input_list: list):
 # return type: list
 # function name must be: merge_lists
 # input parameters: *args
-def merge_lists(*args):
+def merge_lists(*args) -> list:
     con_list = list()
     for x in args:
         con_list += x
     return con_list
 
 
-# Create a function that can reverse a list of tuples
-# example [(1,2),...] => [(2,1),...]
-# return type: list
-# fucntion name must be: reverse_tuples
-# input parameters: input_list
-def reverse_tuples(input_list: tuple):
-    result = reversed(input_list)
-    result = tuple(result)
-    return result
+#Készíts egy függvényt ami paraméterként egy listát vár amiben 2 elemet tartalmazó tuple-ök vannak,
+#és visszatér ezeknek a tuple-nek a fordítottjával.
+#Egy példa a bemenetre: [(1,2),(3,4)]
+#Egy példa a kimenetre: [(2,1),(4,3)]
+#return type: list
+#függvény neve legyen: reverse_tuples
+def reverse_tuples(input_list: list) -> list:
+    reversed_list= list()
+    for x in input_list:
+        result = reversed(x)
+        result = tuple(result)
+        reversed_list.append(result)
+    return reversed_list
 
 
 # Create a function that removes duplicates from a list
 # return type: list
 # fucntion name must be: remove_tuplicates
 # input parameters: input_list
-def remove_duplicates(input_list: list):
+def remove_duplicates(input_list: list) -> list:
     uniques = list()
     for i in range(len(input_list)):
         if input_list[i] not in uniques:
@@ -85,7 +92,9 @@ def remove_duplicates(input_list: list):
 # return type: list
 # function name must be: transpose
 # input parameters: input_list
-def transpose(input_list: list):
+
+
+def transpose(input_list: list) -> list:
     transposed = list()
 
     for i in range(len(input_list[0])):
@@ -97,26 +106,27 @@ def transpose(input_list: list):
     return transposed
 
 
-# Create a function that can split a nested list into chunks
-# chunk size is given by parameter
-# return type: list
-# function name must be: split_into_chunks
-# input parameters: input_list,chunk_size
-def split_into_chunks(input_list: list, chunk_size: int):
+#Készíts egy függvényt ami paraméterként egy listát vár és visszatér a lista csoportosított változatával.
+#Egy olyan listával térjen vissza amiben a paraméterként átadott chunk_size méretű listák vannak.
+#Egy példa a bemenetre: [1,2,3,4,5,6,7,8]
+#Egy példa a kimenetre: [[1,2,3],[4,5,6],[7,8]]
+#NOTE: ha nem mindegyik lista elemet lehet chunk_size méretű listába tenni akkor a maradékot a példában látott módon kezeljétek
+#return type: list
+#függvény neve legyen: split_into_chunks
+def split_into_chunks(input_list: list, chunk_size: int) -> list:
     resized_list = list()
     size_now = 0
     list_idx = 0
     resized_list.append(list())
-    for inner_list in input_list:
-        for x in inner_list:
-            if size_now == chunk_size:
-                list_idx += 1
-                resized_list.append(list())
-                resized_list[list_idx].append(x)
-                size_now = 1
-            else:
-                resized_list[list_idx].append(x)
-                size_now += 1
+    for x in input_list:
+        if size_now == chunk_size:
+            list_idx += 1
+            resized_list.append(list())
+            resized_list[list_idx].append(x)
+            size_now = 1
+        else:
+            resized_list[list_idx].append(x)
+            size_now += 1
 
     return resized_list
 
@@ -128,7 +138,7 @@ def split_into_chunks(input_list: list, chunk_size: int):
 # return type: dictionary
 # function name must be: merge_dicts
 # input parameters: *dict
-def merge_dicts(*dict):
+def merge_dicts(*dict) -> dict:
     main_dict = {}
 
     for i in range(len(dict)):
@@ -142,7 +152,7 @@ def merge_dicts(*dict):
 # return type: dict
 # function name must be: by_parity
 # input parameters: input_list
-def by_parity(input_list: list):
+def by_parity(input_list: list) -> dict:
     sorted_dict = {"even": [], "odd": []}
     for x in input_list:
         if x % 2 == 0:
