@@ -12,7 +12,7 @@ import numpy as np
 
 def create_array(size: tuple=(2,2)) -> np.array:
     arr = np.zeros(shape=size)
-    return arr.dtype
+    return arr
 
 #print(create_array((3,5)))
 
