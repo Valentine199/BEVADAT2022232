@@ -20,16 +20,18 @@ def create_array(size: tuple=(2,2)) -> np.array:
 #Ki: [[1,2],[3,1]]
 #set_one()
 def set_one(array: np.array) -> np.array:
-    np.fill_diagonal(array, 1)
-    return array
+    arr = np.array(array)
+    np.fill_diagonal(arr, 1)
+    return arr
 
 # Transzponáld a paraméterül kapott mártix-ot:
 # Be: [[1, 2], [3, 4]]
 # Ki: [[1, 2], [3, 4]]
 # do_transpose()
 def do_transpose(array: np.array) -> np.array:
-    array = array.T
-    return array
+    arr = np.array(array, int)
+    arr = arr.T
+    return arr.tolist()
 
 # Készíts egy olyan függvényt ami az array-ben lévő értékeket N tizenedjegyik kerekíti, alapértelmezetten 
 # Be: [0.1223, 0.1675], n = 2
@@ -63,5 +65,5 @@ def invert_bool_array(bool_list: np.array) -> np.array:
 # Ki: [1,2,3,4]
 # flatten()
 def flatten(input: np.array) -> np.array:
-    input = input.flatten()
-    return input
+    arr = np.array(input)
+    return arr.flatten()
