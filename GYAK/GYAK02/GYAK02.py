@@ -10,40 +10,31 @@ import numpy as np
 #Ki: [[0,0],[0,0]]
 #create_array()
 
+
 def create_array(size: tuple=(2,2)) -> np.array:
     arr = np.zeros(shape=size)
     return arr
-
-#print(create_array((3,5)))
 
 #Készíts egy függvényt ami a paraméterként kapott array-t főátlót feltölti egyesekkel
 #Be: [[1,2],[3,4]]
 #Ki: [[1,2],[3,1]]
 #set_one()
-
 def set_one(array: np.array) -> np.array:
-    arr = np.array(array, int)
-    np.fill_diagonal(arr, 1)
-    return arr
-
-
+    np.fill_diagonal(array, 1)
+    return array
 
 # Transzponáld a paraméterül kapott mártix-ot:
 # Be: [[1, 2], [3, 4]]
 # Ki: [[1, 2], [3, 4]]
 # do_transpose()
-
 def do_transpose(array: np.array) -> np.array:
-    arr = np.array(array, int)
-    arr = arr.T
-    return arr
-
+    array = array.T
+    return array
 
 # Készíts egy olyan függvényt ami az array-ben lévő értékeket N tizenedjegyik kerekíti, alapértelmezetten 
 # Be: [0.1223, 0.1675], n = 2
 # Ki: [0.12, 0.17]
 # round_array()
-
 def round_array(input: list, n: int = 2) -> list:
     arr = np.array(input, float)
     arr = np.around(arr, n)
@@ -54,18 +45,13 @@ def round_array(input: list, n: int = 2) -> list:
 # Be: [[1, 0, 0], [1, 1, 1],[0, 0, 0]]
 # Ki: [[ True False False], [ True  True  True], [False False False]]
 # bool_array()
-
 def bool_array(bool_list: np.array) -> np.array:
     return np.array(bool_list, bool) 
-
-
-
 
 # Készíts egy olyan függvényt, ami a bementként  0 és 1 ből álló tömben a 1 - False-ra az 0 True-ra cserélni
 # Be: [[1, 0, 0], [1, 1, 1],[0, 0, 0]]
 # Ki: [[ True False False], [ True  True  True], [False False False]]
 # invert_bool_array()
-
 def invert_bool_array(bool_list: np.array) -> np.array:
     arr = np.array(bool_list, bool) 
     arr = np.invert(arr)
@@ -76,8 +62,6 @@ def invert_bool_array(bool_list: np.array) -> np.array:
 # Be: [[1,2], [3,4]]
 # Ki: [1,2,3,4]
 # flatten()
-
 def flatten(input: np.array) -> np.array:
-    arr = np.array(input, int)
-    arr = arr.flatten()
-    return arr
+    input = input.flatten()
+    return input
