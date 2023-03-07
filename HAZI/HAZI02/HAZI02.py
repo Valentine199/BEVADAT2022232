@@ -36,3 +36,8 @@ def encode_Y(array1: np.array, classSize: int) -> np.array:
         list1[i][array1[i]] = 1
 
     return np.array(list1, int)
+
+# A fenti feladatnak valósítsd meg a kiértékelését. Adj meg a 2d array-t és adj vissza a decodolt változatát
+# Be:  [[0,1,0,0], [0, 0, 1, 0], [1, 0, 0, 0], [0, 0, 0, 1]]
+# Ki:  [1, 2, 0, 3]
+# decode_Y()
