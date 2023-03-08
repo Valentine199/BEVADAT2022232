@@ -66,7 +66,7 @@ def eval_classification(list1: list, array1: np.array) -> object:
 # Ki: [-1,2,-1,4,-1,6]
 # repalce_odd_numbers()
 
-def repalce_odd_numbers(input: np.array) -> np.array:
+def replace_odd_numbers(input: np.array) -> np.array:
     input[input % 2 ==1] = -1
 
     return input
@@ -126,7 +126,7 @@ def list_days(start: str, end: str) -> list:
 # Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
 # Be:
 # Ki: 2017-03-24
-def no_name() -> str:
+def get_act_date() -> str:
     time = np.datetime64('today')
     return time
 

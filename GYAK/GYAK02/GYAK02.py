@@ -37,6 +37,8 @@ def do_transpose(array: np.array) -> np.array:
 # Be: [0.1223, 0.1675], n = 2
 # Ki: [0.12, 0.17]
 # round_array()
+
+
 def round_array(input: list, n: int = 2) -> list:
     arr = np.array(input, float)
     arr = np.around(arr, n)
