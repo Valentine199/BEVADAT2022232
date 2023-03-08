@@ -139,5 +139,3 @@ def sec_from_1970() -> int:
     time_new = np.datetime64('now')
     dt = (np.datetime64(time_new) - np.datetime64(time_old)).astype(int)
     return dt
-
-sec_from_1970()
