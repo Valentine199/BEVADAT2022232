@@ -23,8 +23,9 @@ def compare_two_array(array1: np.array, array2: np.array) -> np.array:
 # get_array_shape()
 # 3D-vel még műküdnie kell!
 def get_array_shape(array1: np.array) -> str:
-    size = array1.shape
-    return f"sor: {array1.shape[-2] if len(size) >= 2 else 1}, oszlop: {size[-1]}, melyseg: {array1.shape[-3] if len(size) >= 3 else 1}"
+    arr = np.array(array1)
+    size = arr.shape
+    return f"sor: {size[-2] if len(size) >= 2 else 1}, oszlop: {size[-1]}, melyseg: {size[-3] if len(size) >= 3 else 1}"
 
 # Készíts egy olyan függvényt, aminek segítségével elő tudod állítani egy neurális hálózat tanításához szükséges Y-okat egy numpy array-ből.
 #Bementként add meg az array-t, illetve hogy mennyi class-od van. Kimenetként pedig adjon vissza egy 2d array-t, ahol a sorok az egyes elemek.
@@ -67,9 +68,10 @@ def eval_classification(list1: list, array1: np.array) -> object:
 # repalce_odd_numbers()
 
 def replace_odd_numbers(input: np.array) -> np.array:
-    input[input % 2 ==1] = -1
+    arr = np.array(input)
+    arr[arr % 2 ==1] = -1
 
-    return input
+    return arr
 
 # Készíts egy olyan függvényt, ami egy array értékeit -1 és 1-re változtatja, attól függően, hogy az adott elem nagyobb vagy kisebb a paraméterként megadott számnál.
 # Ha a szám kisebb mint a megadott érték, akkor -1, ha nagyobb vagy egyenlő, akkor pedig 1.
@@ -78,9 +80,10 @@ def replace_odd_numbers(input: np.array) -> np.array:
 # replace_by_value()
 
 def replace_by_value(array1: np.array, num: int) -> np.array:
-    array1[array1 < num] = -1
-    array1[array1 >= num] = 1
-    return array1
+    arr = np.array(array1)
+    arr[arr < num] = -1
+    arr[arr >= num] = 1
+    return arr
 
 # Készítsd egy olyan függvényt, ami az array értékeit összeszorozza és az eredmény visszaadja
 # Be: [1,2,3,4]
@@ -88,14 +91,16 @@ def replace_by_value(array1: np.array, num: int) -> np.array:
 # array_multi()
 # Ha több dimenziós a tömb, akkor az egész tömb elemeinek szorzatával térjen vissza
 def array_multi(array1: np.array) -> int:
-    return np.prod(array1)
+    arr = np.array(array1)
+    return np.prod(arr)
 
 # Készítsd egy olyan függvényt, ami a 2D array értékeit összeszorozza és egy olyan array-el tér vissza, aminek az elemei a soroknak a szorzata
 # Be: [[1, 2], [3, 4]]
 # Ki: [2, 12]
 # array_multi_2d()
 def array_multi_2d(array1: np.array) -> np.array:
-    return np.prod(array1, axis=1)
+    arr = np.array(array1)
+    return np.prod(arr, axis=1)
 
 # Készíts egy olyan függvényt, amit egy meglévő numpy array-hez készít egy bordert nullásokkal.
 # Bementként egy array-t várjon és kimenetként egy array jelenjen meg aminek van border-je
@@ -103,8 +108,9 @@ def array_multi_2d(array1: np.array) -> np.array:
 # Ki: [[0,0,0,0],[0,1,2,0],[0,3,4,0],[0,0,0,0]]
 # add_border()
 def add_border(array1: np.array) -> np.array:
-    array1 = np.pad(array1, pad_width=1, mode='constant', constant_values=0)
-    return array1
+    arr = np.array(array1)
+    arr = np.pad(arr, pad_width=1, mode='constant', constant_values=0)
+    return arr
 
 # Készíts egy olyan függvényt ami két dátum között felsorolja az összes napot.
 # Be: '2023-03', '2023-04'
