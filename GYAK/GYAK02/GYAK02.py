@@ -30,8 +30,7 @@ def set_one(array: np.array) -> np.array:
 # do_transpose()
 def do_transpose(array: np.array) -> np.array:
     arr = np.array(array, int)
-    arr = arr.T
-    return arr.tolist()
+    return arr.transpose()
 
 # Készíts egy olyan függvényt ami az array-ben lévő értékeket N tizenedjegyik kerekíti, alapértelmezetten 
 # Be: [0.1223, 0.1675], n = 2
