@@ -26,7 +26,7 @@ def set_one(array: np.array) -> np.array:
 
 # Transzponáld a paraméterül kapott mártix-ot:
 # Be: [[1, 2], [3, 4]]
-# Ki: [[1, 2], [3, 4]]
+# Ki: [[1, 3], [2, 4]]
 # do_transpose()
 def do_transpose(array: np.array) -> np.array:
     arr = np.array(array, int)
