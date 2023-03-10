@@ -1,3 +1,5 @@
+import asyncio
+
 import numpy as np
 
 #FONTOS!!!
@@ -28,9 +30,9 @@ def set_one(array: np.array) -> np.array:
 # Be: [[1, 2], [3, 4]]
 # Ki: [[1, 3], [2, 4]]
 # do_transpose()
-def do_transpose(array: np.array) -> np.array:
-    arr = np.array(array, int)
-    return arr.T
+def do_transpose(array):
+    arr = np.array(array)
+    return arr.transpose()
 
 # Készíts egy olyan függvényt ami az array-ben lévő értékeket N tizenedjegyik kerekíti, alapértelmezetten 
 # Be: [0.1223, 0.1675], n = 2

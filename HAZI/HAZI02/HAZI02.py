@@ -5,8 +5,8 @@ import numpy as np
 # Ki: [[2,1],[4,3]]
 # column_swap()
 def column_swap(input: np.array) -> np.array:
-    input = np.roll(input, -1, axis=1)
-    return input
+    input = np.roll(input, 1, axis=1)
+    return input.tolist()
 
 # Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek
 # Pl Be: [7,8,9], [9,8,7]
@@ -14,8 +14,9 @@ def column_swap(input: np.array) -> np.array:
 # compare_two_array()
 # egyenlő elemszámúakra kell csak hogy működjön
 def compare_two_array(array1: np.array, array2: np.array) -> np.array:
-    equals = np.where(array1 == array2)
+    equals = np.where(np.array(array1) == np.array(array2))
     return np.array(equals)
+
 
 #Készíts egy olyan függvényt, ami vissza adja a megadott array dimenzióit:
 # Be: [[1,2,3], [4,5,6]]
@@ -46,11 +47,15 @@ def encode_Y(array1: np.array, classSize: int) -> np.array:
 # Ki:  [1, 2, 0, 3]
 # decode_Y()
 def decode_Y(array1: np.array) -> np.array:
+    arr = np.array(array1)
     list1 = list()
-    for inner_list in array1:
-        list1.append(np.where(inner_list == 1))
+    for inner_list in arr:
+        app = np.where(inner_list == 1)
+        idx = int(app[0])
+        list1.append(idx)
 
-    return np.array(list1, int)
+    return list1
+
 
 # Készíts egy olyan függvényt, ami képes kiértékelni egy neurális háló eredményét!
 # Bemenetként egy listát és egy array-t és adja vissza a legvalószínübb element a listából.
@@ -69,7 +74,7 @@ def eval_classification(list1: list, array1: np.array) -> object:
 
 def replace_odd_numbers(input: np.array) -> np.array:
     arr = np.array(input)
-    arr[arr % 2 ==1] = -1
+    arr[arr % 2 == 1] = -1
 
     return arr
 
@@ -141,7 +146,7 @@ def get_act_date() -> str:
 # Ki: másodpercben az idó, int-é kasztolva
 # sec_from_1970()
 def sec_from_1970() -> int:
-    time_old = np.datetime64(0,'s')
+    time_old = np.datetime64(0, 's')
     time_new = np.datetime64('now')
     dt = (np.datetime64(time_new) - np.datetime64(time_old)).astype(int)
     return dt
