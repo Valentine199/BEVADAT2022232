@@ -12,8 +12,7 @@ import numpy as np
 # Ki: [[2,1],[4,3]]
 # column_swap()
 def column_swap(input: np.array) -> np.array:
-    input[:, [0, 1]] = input[:, [1, 0]]
-    return input
+    return np.roll(input, 1, 1).tolist()
 
 # Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek
 # Pl Be: [7,8,9], [9,8,7]
@@ -129,17 +128,13 @@ def add_border(array1: np.array) -> np.array:
 # Ki: ['2023-03-01', '2023-03-02', .. , '2023-03-31',]
 # list_days()
 def list_days(start: str, end: str) -> np.array:
-    list1 = list()
     start_date = np.datetime64(start)
     end_date = np.datetime64(end)
 
     delta = np.timedelta64(1, 'D')
     days = np.arange(start_date, end_date, delta)
 
-    for day in days:
-        list1.append(str(day))
-
-    return np.array(list1, str)
+    return days.astype(str)
 
 # Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
 # Be:
