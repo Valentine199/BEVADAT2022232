@@ -1,12 +1,19 @@
 import numpy as np
 
-# Írj egy olyan fügvényt, ami megfordítja egy 2d array oszlopait
+#FONTOS!!!
+
+# CSAK OTT LEHET HASZNÁLNI FOR LOOP-OT AHOL A FELADAT KÜLÖN KÉRI!
+# [1,2,3,4] --> ezek az értékek np.array-ek. Ahol listát kérek paraméterként ott külön ki fogom emelni!
+# Ha végeztél a feladatokkal, akkor notebook-ot alakítsd át .py.
+# A FÁJLBAN CSAK A FÜGGVÉNYEK LEGYENEK! (KOMMENTEK MARADHATNAK)
+
+# Írj egy olyan fügvényt, ami megfordítja egy 2d array oszlopait. Bemenetként egy array-t vár.
 # Be: [[1,2],[3,4]]
 # Ki: [[2,1],[4,3]]
 # column_swap()
 def column_swap(input: np.array) -> np.array:
-    input = np.roll(input, 1, axis=1)
-    return input.tolist()
+    input[:, [0, 1]] = input[:, [1, 0]]
+    return input
 
 # Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek
 # Pl Be: [7,8,9], [9,8,7]
@@ -117,11 +124,11 @@ def add_border(array1: np.array) -> np.array:
     arr = np.pad(arr, pad_width=1, mode='constant', constant_values=0)
     return arr
 
-# Készíts egy olyan függvényt ami két dátum között felsorolja az összes napot.
-# Be: '2023-03', '2023-04'
+# Készíts egy olyan függvényt ami két dátum között felsorolja az összes napot és ezt adja vissza egy numpy array-ben. A fgv ként str vár paraméterként 'YYYY-MM' formában.
+# Be: '2023-03', '2023-04'  # mind a kettő paraméter str.
 # Ki: ['2023-03-01', '2023-03-02', .. , '2023-03-31',]
 # list_days()
-def list_days(start: str, end: str) -> list:
+def list_days(start: str, end: str) -> np.array:
     list1 = list()
     start_date = np.datetime64(start)
     end_date = np.datetime64(end)
@@ -132,7 +139,7 @@ def list_days(start: str, end: str) -> list:
     for day in days:
         list1.append(str(day))
 
-    return list1
+    return np.array(list1, str)
 
 # Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
 # Be:
@@ -141,12 +148,12 @@ def get_act_date() -> str:
     time = np.datetime64('today')
     return time
 
-# Írj egy olyan függvényt ami visszadja, hogy mennyi másodperc telt el 1970 január 01. 00:00:00 óta.
+# Írj egy olyan függvényt ami visszadja, hogy mennyi másodperc telt el 1970 január 01. 00:02:00 óta. Int-el térjen vissza
 # Be:
 # Ki: másodpercben az idó, int-é kasztolva
 # sec_from_1970()
 def sec_from_1970() -> int:
-    time_old = np.datetime64(0, 's')
+    time_old = np.datetime64(120, 's')
     time_new = np.datetime64('now')
     dt = (np.datetime64(time_new) - np.datetime64(time_old)).astype(int)
     return dt
