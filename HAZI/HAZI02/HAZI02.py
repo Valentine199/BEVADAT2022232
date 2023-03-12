@@ -11,7 +11,7 @@ import numpy as np
 # Be: [[1,2],[3,4]]
 # Ki: [[2,1],[4,3]]
 # column_swap()
-def column_swap(input: np.array) -> np.array:
+def column_swap(input):
     return np.roll(input, 1, 1).tolist()
 
 # Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek
