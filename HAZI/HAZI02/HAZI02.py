@@ -12,7 +12,7 @@ import numpy as np
 # Ki: [[2,1],[4,3]]
 # column_swap()
 def column_swap(input):
-    return np.roll(input, 1, 1).tolist()
+    return np.flip(input, 1)
 
 # Készíts egy olyan függvényt ami összehasonlít két array-t és adjon vissza egy array-ben, hogy hol egyenlőek
 # Pl Be: [7,8,9], [9,8,7]
