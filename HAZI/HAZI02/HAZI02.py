@@ -128,13 +128,13 @@ def add_border(array1: np.array) -> np.array:
 # Ki: ['2023-03-01', '2023-03-02', .. , '2023-03-31',]
 # list_days()
 def list_days(start: str, end: str) -> np.array:
-    start_date = np.datetime64(start)
-    end_date = np.datetime64(end)
+    start_date = np.datetime64(start, 'D')
+    end_date = np.datetime64(end, 'D')
 
     delta = np.timedelta64(1, 'D')
     days = np.arange(start_date, end_date, delta)
 
-    return days.astype(str)
+    return np.array(days)
 
 # Írj egy fügvényt ami vissza adja az aktuális dátumot az alábbi formában: YYYY-MM-DD
 # Be:
