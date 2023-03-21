@@ -1,6 +1,10 @@
+import random
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+
+pd.set_option('display.max_columns', None)
 
 '''
 FONTOS: Az első feladatáltal visszaadott DataFrame-et kell használni a további feladatokhoz. 
@@ -21,7 +25,7 @@ def csv_to_df(path: str) -> pd.core.frame.DataFrame:
 
 df = csv_to_df("StudentsPerformance.csv")
 
-
+#TODO
 '''
 Készíts egy függvényt, ami egy DataFrame-et vár paraméterként, 
 és átalakítja azoknak az oszlopoknak a nevét nagybetűsre amelyiknek neve nem tartalmaz 'e' betüt.
@@ -31,6 +35,8 @@ Egy példa a kimenetre: df_data_capitalized
 return type: pandas.core.frame.DataFrame
 függvény neve: capitalize_columns
 '''
+def capitalize_columns(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
+    pass
 
 
 
@@ -43,7 +49,9 @@ Egy példa a kimenetre: 5
 return type: int
 függvény neve: math_passed_count
 '''
-
+def math_passed_count(input: pd.core.frame.DataFrame) -> int:
+    sum = len(input[input["math score"] >= 50])
+    return sum
 
 
 '''
@@ -54,7 +62,9 @@ Egy példa a kimenetre: df_did_pre_course
 return type: pandas.core.frame.DataFrame
 függvény neve: did_pre_course
 '''
-
+def did_pre_course(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
+    done = input[input["test preparation course"] == "completed"]
+    return done
 
 
 '''
@@ -66,7 +76,10 @@ Egy példa a kimenetre: df_average_scores
 return type: pandas.core.frame.DataFrame
 függvény neve: average_scores
 '''
-
+def average_scores(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
+    scores = ["math score","reading score","writing score"]
+    averages = input.groupby('parental level of education')[scores].mean()
+    return averages
 
 
 '''
@@ -78,6 +91,12 @@ Egy példa a kimenetre: df_data_with_age
 return type: pandas.core.frame.DataFrame
 függvény neve: add_age
 '''
+def add_age(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
+    newDf = input.copy()
+
+    random.seed(42)
+    newDf["age"] = random.randint(18, 66)
+    return newDf
 
 
 
@@ -89,7 +108,17 @@ Egy példa a kimenetre: (99,99,99) #math score, reading score, writing score
 return type: tuple
 függvény neve: female_top_score
 '''
+def female_top_score(input: pd.core.frame.DataFrame) -> tuple:
+    scores = ["math score", "reading score", "writing score"]
 
+    bestFemaleStudent = input[input['gender'] == 'female']
+    bestFemaleStudentAvarage = bestFemaleStudent[scores].mean(axis=1)
+
+    bests = bestFemaleStudent[bestFemaleStudent[scores].mean(axis=1) == bestFemaleStudentAvarage][scores]
+    best = bests.iloc[0]
+    tup = best.tolist()
+
+    return tuple(tup)
 
 
 '''
@@ -107,7 +136,29 @@ Egy példa a kimenetre: df_data_with_grade
 return type: pandas.core.frame.DataFrame
 függvény neve: add_grade
 '''
+def add_grade(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
+    newDf = df.copy()
+    scores = ["math score", "reading score", "writing score"]
 
+    newDf['grade'] = ""
+
+    for i in range(len(newDf)):
+        percent = (newDf.iloc[i][scores].sum() / 300) * 100
+        if 90 <= percent <= 100:
+            newDf['grade'][i] = 'A'
+        elif 80 <= percent < 90:
+            newDf['grade'][i] = 'B'
+        elif 70 <= percent < 80:
+            newDf['grade'][i] = 'C'
+        elif 60 <= percent < 70:
+            newDf['grade'][i] = 'D'
+        else:
+            newDf['grade'][i] = 'F'
+
+
+    return newDf
+
+print(add_grade(df).head())
 
 
 '''
