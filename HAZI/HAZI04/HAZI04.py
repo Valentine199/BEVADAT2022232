@@ -25,7 +25,7 @@ def csv_to_df(path: str) -> pd.core.frame.DataFrame:
 
 df = csv_to_df("StudentsPerformance.csv")
 
-#TODO
+
 '''
 Készíts egy függvényt, ami egy DataFrame-et vár paraméterként, 
 és átalakítja azoknak az oszlopoknak a nevét nagybetűsre amelyiknek neve nem tartalmaz 'e' betüt.
