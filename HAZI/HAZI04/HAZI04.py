@@ -36,10 +36,15 @@ return type: pandas.core.frame.DataFrame
 függvény neve: capitalize_columns
 '''
 def capitalize_columns(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
-    pass
+    newDf = input.copy()
+    idxs = np.array(newDf.keys())
 
+    for x in range(len(idxs)):
+        if 'e' not in idxs[x]:
+            idxs[x] = idxs[x].upper()
 
-
+    newDf.columns = idxs
+    return newDf
 '''
 Készíts egy függvényt, ahol egy szám formájában vissza adjuk, hogy hány darab diáknak sikerült teljesíteni a matek vizsgát.
 (legyen az átmenő ponthatár 50).
@@ -137,7 +142,7 @@ return type: pandas.core.frame.DataFrame
 függvény neve: add_grade
 '''
 def add_grade(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
-    newDf = df.copy()
+    newDf = input.copy()
     scores = ["math score", "reading score", "writing score"]
 
     newDf['grade'] = ""
@@ -158,8 +163,6 @@ def add_grade(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
 
     return newDf
 
-print(add_grade(df).head())
-
 
 '''
 Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan oszlop diagrammot,
@@ -174,6 +177,20 @@ Egy példa a kimenetre: fig
 return type: matplotlib.figure.Figure
 függvény neve: math_bar_plot
 '''
+def math_bar_plot(input: pd.core.frame.DataFrame):
+    newData = input.groupby('gender')['math score'].mean()
+
+    fig, ax = plt.subplots()
+    x = newData.index
+    height = newData.values
+
+    ax.bar(x, height)
+    ax.set_title('Average Math Score by Gender')
+    ax.set_xlabel('Gender')
+    ax.set_ylabel('Math Score')
+
+
+    return fig
 
 
 
@@ -190,8 +207,18 @@ Egy példa a kimenetre: fig
 return type: matplotlib.figure.Figure
 függvény neve: writing_hist
 '''
+def writing_hist(input: pd.core.frame.DataFrame):
+    newData = input['writing score']
+
+    fig, ax = plt.subplots()
+
+    ax.hist(newData)
+    ax.set_title('Distribution of Writing Scores')
+    ax.set_xlabel('Writing Score')
+    ax.set_ylabel('Number of Students')
 
 
+    return fig
 
 ''' 
 Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan kördiagramot,
@@ -206,4 +233,12 @@ Egy példa a kimenetre: fig
 return type: matplotlib.figure.Figure
 függvény neve: ethnicity_pie_chart
 '''
+def ethnicity_pie_chart(input: pd.core.frame.DataFrame):
+    fig, ax = plt.subplots()
+    labels = input['race/ethnicity'].unique()
+    ethnicity_count = input.groupby('race/ethnicity')['race/ethnicity'].count()
 
+    ax.pie(ethnicity_count.values, labels=labels, autopct='%1.1f%%')
+    ax.set_title('Proportion of Students by Race/Ethnicity')
+
+    return fig
