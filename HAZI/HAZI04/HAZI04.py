@@ -1,10 +1,6 @@
-import random
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
-pd.set_option('display.max_columns', None)
 
 '''
 FONTOS: Az első feladatáltal visszaadott DataFrame-et kell használni a további feladatokhoz. 
@@ -98,9 +94,8 @@ függvény neve: add_age
 '''
 def add_age(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
     newDf = input.copy()
-
-    random.seed(42)
-    newDf["age"] = random.randint(18, 66)
+    np.random.seed(42)
+    newDf["age"] = np.random.randint(18, 66)
     return newDf
 
 
