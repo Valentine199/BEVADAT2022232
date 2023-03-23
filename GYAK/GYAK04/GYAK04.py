@@ -97,18 +97,19 @@ függvény neve: plot_population
 '''
 
 
-def plot_population(input: pd.core.frame.DataFrame):
+def plot_population(input: pd.DataFrame) -> plt.Figure:
+    newDf = input.copy()
     fig, ax = plt.subplots()
     
-    ax.plot(input['country'], input['population'])
+    ax.bar(newDf['country'], newDf['population'])
 
     ax.set_xlabel("Country")
     ax.set_ylabel("Population (millions)")
     ax.set_title('Population of Countries')
     return fig
-    
 
-
+plot_population(df)
+plt.show()
 
 '''
 Készíts egy függvényt, ami a bemeneti Dataframe adatai alapján elkészít egy olyan kördiagramot,
@@ -123,14 +124,12 @@ függvény neve: plot_area
 '''
 
 
-def plot_area(input: pd.core.frame.DataFrame):
+def plot_area(input: pd.DataFrame) -> plt.Figure:
+    newDf=input.copy()
     fig, ax = plt.subplots()
-    labels = input['country']
-
-    ax.pie(input['area'], labels=labels, autopct='%1.1f%%')
+    labels = newDf['country']
     ax.set_title('Area of Countries')
+    ax.pie(newDf['area'], labels=labels)
 
     return fig
-
-
 
