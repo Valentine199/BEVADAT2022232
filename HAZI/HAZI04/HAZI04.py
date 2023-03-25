@@ -95,7 +95,7 @@ függvény neve: add_age
 def add_age(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
     newDf = input.copy()
     np.random.seed(42)
-    newDf["age"] = np.random.randint(18, 66)
+    newDf["age"] = np.random.randint(18, 67)
     return newDf
 
 
@@ -109,16 +109,13 @@ return type: tuple
 függvény neve: female_top_score
 '''
 def female_top_score(input: pd.core.frame.DataFrame) -> tuple:
-    scores = ["math score", "reading score", "writing score"]
-
-    bestFemaleStudent = input[input['gender'] == 'female']
-    bestFemaleStudentAvarage = bestFemaleStudent[scores].mean(axis=1)
-
-    bests = bestFemaleStudent[bestFemaleStudent[scores].mean(axis=1) == bestFemaleStudentAvarage][scores]
-    best = bests.iloc[0]
-    tup = best.tolist()
-
-    return tuple(tup)
+    newdf = input.copy()
+    females = newdf.loc[newdf['gender'] == 'female']
+    score = ['math score', 'reading score', 'writing score']
+    females['avg'] = females[score].mean(axis=1)
+    females = pd.DataFrame.sort_values(females, by=['avg'])[::-1]
+    mytuple = (females.iloc[0]['math score'], females.iloc[0]['reading score'], females.iloc[0]['writing score'])
+    return mytuple
 
 
 '''
@@ -230,7 +227,7 @@ függvény neve: ethnicity_pie_chart
 '''
 def ethnicity_pie_chart(input: pd.core.frame.DataFrame):
     fig, ax = plt.subplots()
-    labels = input['race/ethnicity'].unique()
+    labels = input['race/ethnicity'].sort_values().unique()
     ethnicity_count = input.groupby('race/ethnicity')['race/ethnicity'].count()
 
     ax.pie(ethnicity_count.values, labels=labels, autopct='%1.1f%%')
