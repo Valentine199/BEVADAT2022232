@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -94,8 +96,10 @@ függvény neve: add_age
 '''
 def add_age(input: pd.core.frame.DataFrame) -> pd.core.frame.DataFrame:
     newDf = input.copy()
-    np.random.seed(42)
-    newDf["age"] = np.random.randint(18, 67)
+    random.seed(42)
+    newDf["age"] = 0
+    for i in range(len(newDf)):
+        newDf["age"][i] = random.randint(18, 67)
     return newDf
 
 
