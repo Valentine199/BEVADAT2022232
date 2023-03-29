@@ -28,23 +28,25 @@ class KNNClassifier:
         x_train, y_train = features[:train_size], labels[:train_size]
         x_test, y_test = features[train_size:], labels[train_size:]
 
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
+        self.x_train = x_train.reset_index(drop=True)
+        self.y_train = y_train.reset_index(drop=True)
+        self.x_test = x_test.reset_index(drop=True)
+        self.y_test = y_test.reset_index(drop=True)
 
     def euclidean(self, element_of_x: pd.core.frame.Series) -> pd.core.frame.DataFrame:
         distance = self.x_train - element_of_x
         distance = distance ** 2
-        distance = distance.sum()
+        distance = distance.sum(axis=1)
         distance = distance ** (1/2)
         return distance
 
     def predict(self):
         labels_pred = []
         for i in range(len(self.x_test)):
-            distances = pd.Series(KNNClassifier.euclidean(self, self.x_test.iloc[i]))
-            label_pred = distances.nsmallest(self.k)
+            distances = pd.Series(KNNClassifier.euclidean(self, self.x_test.iloc[i]), name="distance")
+            distances = pd.concat([distances, self.y_train], axis=1)
+            distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
+            label_pred = distances["Outcome"].mode().values
             labels_pred.append(label_pred)
         self.y_preds = pd.DataFrame(labels_pred)
 
@@ -66,12 +68,12 @@ class KNNClassifier:
 
         return max(results, key=lambda item: item[1])
 
-x, y = KNNClassifier.load_csv("diabetes.csv")
+#x, y = KNNClassifier.load_csv("diabetes.csv")
 
-classifier = KNNClassifier(5, 0.2)
+#classifier = KNNClassifier(5, 0.2)
 
-classifier.train_test_split(x, y)
-classifier.predict()
+#classifier.train_test_split(x, y)
+#classifier.predict()
 
-print(classifier.accuracy())
+#print(classifier.accuracy())
 
