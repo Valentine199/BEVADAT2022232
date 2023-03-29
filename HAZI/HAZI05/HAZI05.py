@@ -1,10 +1,7 @@
-import math
-
 import pandas as pd
 from typing import Tuple
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
-from scipy.spatial import distance
 
 
 
@@ -48,7 +45,7 @@ class KNNClassifier:
             distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
             label_pred = distances["Outcome"].mode().values
             labels_pred.append(label_pred)
-        self.y_preds = pd.DataFrame(labels_pred)
+        self.y_preds = pd.Series(labels_pred).reset_index(drop=True)
 
     def accuracy(self) -> float:
         true_positive = (self.y_test == self.y_preds).sum()
@@ -64,16 +61,21 @@ class KNNClassifier:
             self.k = i
             KNNClassifier.predict(self)
             acc = round(KNNClassifier.accuracy(self), 2)
-            results.append(i, acc)
+            tup = i, acc
+            results.append(tup)
 
         return max(results, key=lambda item: item[1])
 
 #x, y = KNNClassifier.load_csv("diabetes.csv")
 
-#classifier = KNNClassifier(5, 0.2)
+#classifier = KNNClassifier(4, 0.2)
 
 #classifier.train_test_split(x, y)
 #classifier.predict()
 
 #print(classifier.accuracy())
+#classifier.plot_confusion_matrix()
+#print(classifier.test_accuracy())
+
+
 
