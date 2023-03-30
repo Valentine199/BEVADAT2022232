@@ -1,0 +1,31 @@
+A ferldolgozandó fájlt betöltjük a load_csv metódussal. Fontos hogy ez két elemet adjon vissza, mert itt választjuk szét
+a feature-öket és a label-eket. 
+
+A  train_test_split-nek egy százalékos értéket adunk meg, hogy az adathalmaz hány százaléka lesz teszt adat.
+Fontos hogy párhuzamosan, ugyan annál az elemnél kell elmetszenünk a feature-öket és label-eket. Ennek az a lényege,
+hogy tanító és teszt adatokra bontsuk az egész adathalmazt. A train adatokon(label és features is) tanul a program.
+Ezután a soha nem látott test feature-öket használva a betanult algoritmus megtippeli az eredményeket. Ezeket lehet 
+összevetni a  leválasztott test label-ekkel.
+
+euclidean függvény egy beadott sorhoz számolja ki a többi tanuló adathoz képesti Euklideszi normáját. Ez adja meg hogy
+milyen messze van az adott adatsor a többi adathoz képest. A függvény a matematika szabályai alapján számolódik.
+Azaz az egész adathalmazból kivonjuk az adott sort(broadcast módszerrel) ennek vesszük az abszolútértékét.
+Ezután ezt összeadjuk hogy soronként egy darab számot kapjunk. Ezeknek vesszük a gyökét és ezek a normák a sorhoz.
+
+predict függvény próbálja megadni a tesztadatokra a megfejtést. A tesztadatok minden sorára kiszámoljuk az euklideszi
+normát. A korábbi elemeknek a normájához hozzárendeljük a az adatok kimenetét. A normák alapján megkeressük a lekissebb 
+távolságra lévő elemeket.Ezek közül a hozzárendelt y alapján megkeressük a leggyakoribb értéket(módusz). A KNN algoritmus alapja 
+hogy amelyik a legvalószínűbb erre az adatsorra akkor ez is olyan. Ezért ezt a legvalószínűbb értéket adja meg az új sornak
+
+accuracy függvény értékeli a rendszerünket. Megnézzük hogy hányszor találtuk el a teszt adatokat. Azaz a teszt feature-ökre
+a tippelésünk hányszor volt ugyan az mint a teszt label értéke. Ezeket összeadjuk és elosztjuk az összes teszt label-el.
+Ez megadja a százalékos pontossági értékét az algoritmusunknak.
+
+plot_confusion_matrix egy konfúziós mátrixot számol ki amihez a teszt label-eket és tippelt értékekekt kell megadnunk.
+A konfúziós mátrix négy részből áll. Balfelső azon esetek száma mikor 1-et tippeltünk és 1 is lett. 
+jobb felső mikor 1et tippeltünk pedig 0, bal alsó 0 tippeltünk, pedig 1, jobb alsó 0-t tippeltünk és tényleg 0.
+Ebből látható hogy hányszor volt igazunk illetve amikor tévedünk akkor melyik eset a gyakoribb.
+
+best_k függvény végig lépked a k értékeken 1-20 ig és mindegyik k értékkel megtippeli a teszt featurok alapján a kimenetet
+Ezek pontosságát az accuracy függvénnyel számolom ki, majd összefűzöm,majd maximum kiválasztással kiválasztom hogy melyik 
+k értékre jön ki a legnagyobb pontosság. Ezt a k-t és pontosságát adom vissza.
