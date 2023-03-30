@@ -2,6 +2,7 @@ import pandas as pd
 from typing import Tuple
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
+from scipy.stats import mode
 
 
 
@@ -37,13 +38,14 @@ class KNNClassifier:
         distance = distance ** (1/2)
         return distance
 
-    def predict(self):
+    def predict(self, x_test):
         labels_pred = []
-        for i in range(len(self.x_test)):
-            distances = pd.Series(KNNClassifier.euclidean(self, self.x_test.iloc[i]), name="distance")
+        for i in range(len(x_test)):
+            distances = pd.Series(KNNClassifier.euclidean(self, x_test.iloc[i]), name="distance")
             distances = pd.concat([distances, self.y_train], axis=1)
             distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
-            label_pred = distances["Outcome"].mode().values
+            lista = distances["Outcome"].values.tolist()
+            label_pred = mode(lista, keepdims=False).mode.item()
             labels_pred.append(label_pred)
         self.y_preds = pd.Series(labels_pred).reset_index(drop=True)
 
@@ -55,9 +57,9 @@ class KNNClassifier:
         conf_matrix = confusion_matrix(self.y_test, self.y_preds)
         sns.heatmap(conf_matrix, annot=True)
 
-    def test_accuracy(self):
+    def best_k(self):
         results = list()
-        for i in range(1,21):
+        for i in range(1, 21):
             self.k = i
             KNNClassifier.predict(self)
             acc = round(KNNClassifier.accuracy(self), 2)
@@ -75,7 +77,7 @@ class KNNClassifier:
 
 #print(classifier.accuracy())
 #classifier.plot_confusion_matrix()
-#print(classifier.test_accuracy())
+#print(classifier.best_k())
 
 
 
