@@ -7,6 +7,11 @@ from scipy.stats import mode
 
 
 class KNNClassifier:
+    def get_k(self):
+        return self.k
+
+    k_neighbors = property(fget=get_k)
+
     def __init__(self, k: int, test_split_ratio):
         self.k = k
         self.test_split_ratio = test_split_ratio
@@ -60,7 +65,7 @@ class KNNClassifier:
 
     def best_k(self):
         results = list()
-        for i in range(1, 21):
+        for i in range(1, 20):
             self.k = i
             KNNClassifier.predict(self)
             acc = round(KNNClassifier.accuracy(self), 2)
