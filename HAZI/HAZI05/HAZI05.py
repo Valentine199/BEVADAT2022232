@@ -43,10 +43,10 @@ class KNNClassifier:
         distance = distance ** (1/2)
         return distance
 
-    def predict(self):
+    def predict(self, x_test):
         labels_pred = []
-        for i in range(len(self.x_test)):
-            distances = pd.Series(KNNClassifier.euclidean(self, self.x_test.iloc[i]), name="distance")
+        for i in range(len(x_test)):
+            distances = pd.Series(KNNClassifier.euclidean(self, x_test.iloc[i]), name="distance")
             distances = pd.concat([distances, self.y_train], axis=1)
             distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
             lista = distances["Outcome"].values.tolist()
