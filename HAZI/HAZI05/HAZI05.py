@@ -38,10 +38,10 @@ class KNNClassifier:
         distance = distance ** (1/2)
         return distance
 
-    def predict(self, x_test):
+    def predict(self):
         labels_pred = []
-        for i in range(len(x_test)):
-            distances = pd.Series(KNNClassifier.euclidean(self, x_test.iloc[i]), name="distance")
+        for i in range(len(self.x_test)):
+            distances = pd.Series(KNNClassifier.euclidean(self, self.x_test.iloc[i]), name="distance")
             distances = pd.concat([distances, self.y_train], axis=1)
             distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
             lista = distances["Outcome"].values.tolist()
@@ -53,7 +53,7 @@ class KNNClassifier:
         true_positive = (self.y_test == self.y_preds).sum()
         return true_positive / len(self.y_test) * 100
 
-    def plot_confusion_matrix(self):
+    def confusion_matrix(self):
         conf_matrix = confusion_matrix(self.y_test, self.y_preds)
         return conf_matrix
         #sns.heatmap(conf_matrix, annot=True)
@@ -77,7 +77,7 @@ class KNNClassifier:
 #classifier.predict()
 
 #print(classifier.accuracy())
-#classifier.plot_confusion_matrix()
+#classifier.confusion_matrix()
 #print(classifier.best_k())
 
 
