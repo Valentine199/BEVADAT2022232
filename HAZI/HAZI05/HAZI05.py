@@ -69,7 +69,7 @@ class KNNClassifier:
         results = list()
         for i in range(1, 20):
             self.k = i
-            KNNClassifier.predict(self)
+            KNNClassifier.predict(self, self.x_test)
             acc = round(KNNClassifier.accuracy(self), 2)
             tup = i, acc
             results.append(tup)
