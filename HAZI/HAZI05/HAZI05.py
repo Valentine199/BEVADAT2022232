@@ -48,7 +48,9 @@ class KNNClassifier:
         for i in range(len(x_test)):
             distances = pd.Series(KNNClassifier.euclidean(self, x_test.iloc[i]), name="distance")
             distances = pd.concat([distances, self.y_train], axis=1)
-            distances = distances[distances["distance"].isin(distances["distance"].nsmallest(self.k))]
+
+            mask = distances["distance"].isin(distances["distance"].nsmallest(self.k))
+            distances = distances[mask]
             lista = distances["Outcome"].values.tolist()
             label_pred = mode(lista, keepdims=False).mode.item()
             labels_pred.append(label_pred)
