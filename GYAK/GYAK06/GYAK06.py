@@ -39,7 +39,7 @@ class DecisionTreeClassifier():
         
         X, Y = dataset[:,:-1], dataset[:,-1]
         num_samples, num_features = np.shape(X)
-        if num_samples>=self.min_samples_split and curr_depth<=self.max_depth:
+        if num_samples >= self.min_samples_split and curr_depth<=self.max_depth:
             best_split = self.get_best_split(dataset, num_samples, num_features)
             if best_split["info_gain"]>0: 
                 left_subtree = self.build_tree(best_split["dataset_left"], curr_depth+1)
@@ -129,7 +129,9 @@ class DecisionTreeClassifier():
         
         dataset = np.concatenate((X, Y), axis=1)
         self.root = self.build_tree(dataset)
-    
+
+
+
     def predict(self, X):
         
         preditions = [self.make_prediction(x, self.root) for x in X]
