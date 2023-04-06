@@ -67,7 +67,7 @@ class NJCleaner():
     def save_first_60k(self, save):
         to_print = self.data.loc[:60000, :].copy()
 
-        to_print.to_csv(save)
+        to_print.to_csv(save, index=False)
 
 
 
