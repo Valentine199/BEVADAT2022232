@@ -54,6 +54,7 @@ HAZI-
 
 
 #from numba import jit, cuda
+#import numba
 
 import numpy as np
 import pandas as pd
@@ -90,7 +91,7 @@ class DecisionTreeClassifier():
         num_samples, num_features = np.shape(X)
         if num_samples >= self.min_samples_split and curr_depth <= self.max_depth:
             best_split = self.get_best_split(dataset, num_samples, num_features)
-            if best_split["info_gain"] > 0:
+            if best_split != {} and best_split["info_gain"] > 0:
                 left_subtree = self.build_tree(best_split["dataset_left"], curr_depth + 1)
                 right_subtree = self.build_tree(best_split["dataset_right"], curr_depth + 1)
                 return Node(best_split["feature_index"], best_split["threshold"],
@@ -180,7 +181,7 @@ class DecisionTreeClassifier():
             print("%sright:" % (indent), end="")
             self.print_tree(tree.right, indent + indent)
 
-    #@jit(target_backend='cuda', forceobj=True)
+    # @jit(target_backend='cuda', forceobj=True)
     def fit(self, X, Y):
 
         dataset = np.concatenate((X, Y), axis=1)
@@ -203,7 +204,7 @@ class DecisionTreeClassifier():
         else:
             return self.make_prediction(x, tree.right)
 
-data = pd.read_csv("save.csv")
+data = pd.read_csv("NJ_60k.csv")
 
 X = data.iloc[:, :-1].values
 Y = data.iloc[:, -1].values.reshape(-1, 1)
@@ -211,21 +212,152 @@ Y = data.iloc[:, -1].values.reshape(-1, 1)
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.2, random_state=41)
 
 
-results = np.zeros([30,30])
+results = np.zeros([30,10])
 
-#for i in range(1,30):
-    #for j in range(1,30):
-classifier = DecisionTreeClassifier(min_samples_split=3, max_depth=3)
+#for i in range(0, 30, 3):
+    #for j in range(0, 30, 3):
+classifier = DecisionTreeClassifier(min_samples_split=90, max_depth=12)
 classifier.fit(X_train, Y_train)
 Y_pred = classifier.predict(X_test)
-        #results[i][j] = accuracy_score(Y_test, Y_pred)
+        #x_idx = int(i/3)
+        #y_idx = int(j/3)
+        #results[x_idx][y_idx] = accuracy_score(Y_test, Y_pred)
+        #print("Accuracy for min_sample_split="+str(i*10)+" and max_depth="+str(j)+" is "+str(results[x_idx][y_idx]))
 
 print(accuracy_score(Y_test, Y_pred))
 #print(results)
 
 
 '''
-(3,3) 0,78
+A tesztelést először az órán használt értékekkkel próbáltam ki hogy lássam hogy honnan indulunk ki 78%-os pontossága volt. Ezután kipróbáltam
+a másik info gain metódust ami nem a gini-re épül hanem az entropiára. Azt vártam, hogy lassabb lesz de esetleg pontosabb lesz a model. Sajnos csak lassabb volt.
+Legnagyobb kihívás sokáig az volt, hogy 6-nál mélyebbre nem tudtam menni mert hibát dobott a build_tree metódus hogy a best_splitben nincs info gain oszlop
+ez akkor ált elő, ha nem volt jobb split az előzőnél mikor az ezt generáló metódus lefutott. Ezt az "if best_split != {}" kiegészítéssel oldottam meg.
+Ezután már ment bármekkora max_depth a függvénynek. ekkor kicsit kísérleteztem extrémebb esetekkel. Mind a kettő jobban közelített az eddigieknél de mégsem volt tökéletes.
+Ezután gondoltam hogy megpróbálok minden levélhez egyenlő méretű min_splitet megadni és nagyjából egyenlően elosztani az adatokat.
+10-es max depth mellett a splitek sorainak minimum száma 30 (60000/2^{10+1}) kellett hogy legyen. Ez adott vissza először 80%-os eredményt
+
+Ezután duplázgattam még a depth-et vagy a min_splitetde az tűnt fel, hogy a 10-es depth mellett szinte bármilyen min_split 80% körülre jön ki.
+Ezután kezdtem el futtatni a grid search algoritmust mert már tudtam neki nagyjából határokat mondani ami között keressen.
+
+Első 10 eredmény a kézi manuális tesztek eredményei olyan sorrendben ahogy fent is mondtam.
+Alatta van az automatikus tesztelés eredménye
+A végső paramétereim a min_sample_split=90, max_depth=12 mert ennek pontossága:0.80175
+
+(3,3,) 0,78
+(3, 3 entropy) 0.78
+(3, 7 ) 0.79 (kerekítve 80)
+(3,14) 0.79
+(6000, 10) 0.78
+(30, 10) 0.80 10 mély fának 2^{10+1} levele van ezért minden levélhez egyenlően oszom az értékeket 
+(15, 11) 0.7995 csak előző egy lépéssel tovább
+(30, 20) 0.78
+(60, 10) 0.801 
+(120, 10) 0.800
+
+----------------------------------------------------------------------
+Automatikus teszt ahol a min_split 270 ig ment 0-ról 30-asával ugrálva és a max_depth pedig 0-27 ig 3asával ugrálva
+----------------------------------------------------------------------
+Accuracy for min_sample_split=0 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=0 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=0 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=0 and max_depth=9 is 0.79775
+Accuracy for min_sample_split=0 and max_depth=12 is 0.7940833333333334
+Accuracy for min_sample_split=0 and max_depth=15 is 0.7818333333333334
+Accuracy for min_sample_split=0 and max_depth=18 is 0.7705833333333333
+Accuracy for min_sample_split=0 and max_depth=21 is 0.7628333333333334
+Accuracy for min_sample_split=0 and max_depth=24 is 0.7630833333333333
+Accuracy for min_sample_split=0 and max_depth=27 is 0.76
+Accuracy for min_sample_split=30 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=30 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=30 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=30 and max_depth=9 is 0.798
+Accuracy for min_sample_split=30 and max_depth=12 is 0.7995
+Accuracy for min_sample_split=30 and max_depth=15 is 0.7929166666666667
+Accuracy for min_sample_split=30 and max_depth=18 is 0.7881666666666667
+Accuracy for min_sample_split=30 and max_depth=21 is 0.7826666666666666
+Accuracy for min_sample_split=30 and max_depth=24 is 0.7825
+Accuracy for min_sample_split=30 and max_depth=27 is 0.7815
+Accuracy for min_sample_split=60 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=60 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=60 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=60 and max_depth=9 is 0.79825
+Accuracy for min_sample_split=60 and max_depth=12 is 0.8016666666666666
+Accuracy for min_sample_split=60 and max_depth=15 is 0.7949166666666667
+Accuracy for min_sample_split=60 and max_depth=18 is 0.7909166666666667
+Accuracy for min_sample_split=60 and max_depth=21 is 0.7886666666666666
+Accuracy for min_sample_split=60 and max_depth=24 is 0.7885
+Accuracy for min_sample_split=60 and max_depth=27 is 0.78775
+Accuracy for min_sample_split=90 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=90 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=90 and max_depth=6 is 0.7888333333333334
+Accuracy for min_sample_split=90 and max_depth=9 is 0.79825
+Accuracy for min_sample_split=90 and max_depth=12 is 0.80175
+Accuracy for min_sample_split=90 and max_depth=15 is 0.7970833333333334
+Accuracy for min_sample_split=90 and max_depth=18 is 0.7955
+Accuracy for min_sample_split=90 and max_depth=21 is 0.7945833333333333
+Accuracy for min_sample_split=90 and max_depth=24 is 0.7946666666666666
+Accuracy for min_sample_split=90 and max_depth=27 is 0.7945
+Accuracy for min_sample_split=120 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=120 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=120 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=120 and max_depth=9 is 0.7975
+Accuracy for min_sample_split=120 and max_depth=12 is 0.80125
+Accuracy for min_sample_split=120 and max_depth=15 is 0.7958333333333333
+Accuracy for min_sample_split=120 and max_depth=18 is 0.79475
+Accuracy for min_sample_split=120 and max_depth=21 is 0.79425
+Accuracy for min_sample_split=120 and max_depth=24 is 0.79425
+Accuracy for min_sample_split=120 and max_depth=27 is 0.79425
+Accuracy for min_sample_split=150 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=150 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=150 and max_depth=6 is 0.7884166666666667
+Accuracy for min_sample_split=150 and max_depth=9 is 0.7973333333333333
+Accuracy for min_sample_split=150 and max_depth=12 is 0.80025
+Accuracy for min_sample_split=150 and max_depth=15 is 0.796
+Accuracy for min_sample_split=150 and max_depth=18 is 0.79525
+Accuracy for min_sample_split=150 and max_depth=21 is 0.79475
+Accuracy for min_sample_split=150 and max_depth=24 is 0.79475
+Accuracy for min_sample_split=150 and max_depth=27 is 0.79475
+Accuracy for min_sample_split=180 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=180 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=180 and max_depth=6 is 0.7883333333333333
+Accuracy for min_sample_split=180 and max_depth=9 is 0.7971666666666667
+Accuracy for min_sample_split=180 and max_depth=12 is 0.8003333333333333
+Accuracy for min_sample_split=180 and max_depth=15 is 0.79725
+Accuracy for min_sample_split=180 and max_depth=18 is 0.7965
+Accuracy for min_sample_split=180 and max_depth=21 is 0.7964166666666667
+Accuracy for min_sample_split=180 and max_depth=24 is 0.7964166666666667
+Accuracy for min_sample_split=180 and max_depth=27 is 0.7964166666666667
+Accuracy for min_sample_split=210 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=210 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=210 and max_depth=6 is 0.7883333333333333
+Accuracy for min_sample_split=210 and max_depth=9 is 0.7969166666666667
+Accuracy for min_sample_split=210 and max_depth=12 is 0.7998333333333333
+Accuracy for min_sample_split=210 and max_depth=15 is 0.7974166666666667
+Accuracy for min_sample_split=210 and max_depth=18 is 0.7974166666666667
+Accuracy for min_sample_split=210 and max_depth=21 is 0.7973333333333333
+Accuracy for min_sample_split=210 and max_depth=24 is 0.7973333333333333
+Accuracy for min_sample_split=210 and max_depth=27 is 0.7973333333333333
+Accuracy for min_sample_split=240 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=240 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=240 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=240 and max_depth=9 is 0.7971666666666667
+Accuracy for min_sample_split=240 and max_depth=12 is 0.8000833333333334
+Accuracy for min_sample_split=240 and max_depth=15 is 0.79775
+Accuracy for min_sample_split=240 and max_depth=18 is 0.7978333333333333
+Accuracy for min_sample_split=240 and max_depth=21 is 0.79775
+Accuracy for min_sample_split=240 and max_depth=24 is 0.79775
+Accuracy for min_sample_split=240 and max_depth=27 is 0.79775
+Accuracy for min_sample_split=270 and max_depth=0 is 0.7773333333333333
+Accuracy for min_sample_split=270 and max_depth=3 is 0.7839166666666667
+Accuracy for min_sample_split=270 and max_depth=6 is 0.7885
+Accuracy for min_sample_split=270 and max_depth=9 is 0.7974166666666667
+Accuracy for min_sample_split=270 and max_depth=12 is 0.8003333333333333
+Accuracy for min_sample_split=270 and max_depth=15 is 0.7980833333333334
+Accuracy for min_sample_split=270 and max_depth=18 is 0.7981666666666667
+Accuracy for min_sample_split=270 and max_depth=21 is 0.7981666666666667
+Accuracy for min_sample_split=270 and max_depth=24 is 0.7981666666666667
+Accuracy for min_sample_split=270 and max_depth=27 is 0.7981666666666667
 '''
 
 
