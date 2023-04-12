@@ -17,7 +17,7 @@ class NJCleaner():
         self.data = NJCleaner.convert_delay(self, self.data)
         self.data = NJCleaner.drop_unnecessary_columns(self, self.data)
 
-        NJCleaner.save_first_60k(self, save_csv_path)
+        NJCleaner.save_first_60k(self, path)
 
         ##self.data.to_csv(save_csv_path)
 
