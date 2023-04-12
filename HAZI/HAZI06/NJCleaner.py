@@ -9,7 +9,7 @@ class NJCleaner():
         order = self.data.sort_values(by=['scheduled_time'])
         return order
 
-    def prep_df(self, save_csv_path='data/NJ.csv'):
+    def prep_df(self, path='data/NJ.csv'):
         self.data = self.order_by_scheduled_time()
         self.data = NJCleaner.drop_columns_and_nan(self, self.data)
         self.data = NJCleaner.convert_date_to_day(self, self.data)
@@ -64,10 +64,10 @@ class NJCleaner():
 
         return droppos
 
-    def save_first_60k(self, save):
+    def save_first_60k(self, path):
         to_print = self.data.loc[:60000, :].copy()
 
-        to_print.to_csv(save, index=False)
+        to_print.to_csv(path, index=False)
 
 
 
@@ -75,8 +75,8 @@ class NJCleaner():
 
 
 
-cleaned = NJCleaner('2018_03.csv')
-cleaned.prep_df('save.csv')
+#cleaned = NJCleaner('2018_03.csv')
+#cleaned.prep_df('save.csv')
 
 
 
