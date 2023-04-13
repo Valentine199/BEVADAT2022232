@@ -11,30 +11,30 @@ class NJCleaner():
 
     def prep_df(self, path='data/NJ.csv'):
         self.data = self.order_by_scheduled_time()
-        self.data = NJCleaner.drop_columns_and_nan(self, self.data)
-        self.data = NJCleaner.convert_date_to_day(self, self.data)
-        self.data = NJCleaner.convert_scheduled_time_to_part_of_the_day(self, self.data)
-        self.data = NJCleaner.convert_delay(self, self.data)
-        self.data = NJCleaner.drop_unnecessary_columns(self, self.data)
+        self.data = self.drop_columns_and_nan()
+        self.data = self.convert_date_to_day()
+        self.data = self.convert_scheduled_time_to_part_of_the_day()
+        self.data = self.convert_delay()
+        self.data = self.drop_unnecessary_columns()
 
         NJCleaner.save_first_60k(self, path)
 
         ##self.data.to_csv(save_csv_path)
 
-    def drop_columns_and_nan(self, df):
-        dropped = df.drop(['from', 'to'], axis=1)
+    def drop_columns_and_nan(self):
+        dropped = self.data.drop(['from', 'to'], axis=1)
         dropped = dropped.dropna()
         return dropped
 
-    def convert_date_to_day(self, df):
-        day_transformed = df.copy()
+    def convert_date_to_day(self):
+        day_transformed = self.data.copy()
         day_transformed['date'] = pd.to_datetime(day_transformed['date'])
         day_transformed['day'] = day_transformed['date'].dt.day_name()
         day_transformed = day_transformed.drop(['date'], axis=1)
         return day_transformed
 
-    def convert_scheduled_time_to_part_of_the_day(self, df):
-        schedule = df
+    def convert_scheduled_time_to_part_of_the_day(self):
+        schedule = self.data.copy()
         schedule['scheduled_time'] = pd.to_datetime(schedule['scheduled_time'])
         schedule = schedule.set_index('scheduled_time')
 
@@ -51,21 +51,21 @@ class NJCleaner():
         #schedule.drop(['scheduled_time'], axis=1, inplace=True)
         return schedule
 
-    def convert_delay(self, df):
-        delayes = df.copy()
+    def convert_delay(self):
+        delayes = self.data.copy()
         delayes['delay'] = 0
         delayes.loc[delayes['delay_minutes'] >= 5, 'delay'] = 1
 
         return delayes
 
-    def drop_unnecessary_columns(self, df):
-        droppos = df.copy()
+    def drop_unnecessary_columns(self):
+        droppos = self.data.copy()
         droppos.drop(['train_id', 'actual_time', 'delay_minutes'], axis=1, inplace=True)
 
         return droppos
 
     def save_first_60k(self, path):
-        to_print = self.data.loc[:60000, :].copy()
+        to_print = self.data.loc[:59999, :]
 
         to_print.to_csv(path, index=False)
 
@@ -75,8 +75,8 @@ class NJCleaner():
 
 
 
-#cleaned = NJCleaner('2018_03.csv')
-#cleaned.prep_df('save.csv')
+cleaned = NJCleaner('2018_03.csv')
+cleaned.prep_df('save.csv')
 
 
 
