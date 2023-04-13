@@ -75,8 +75,8 @@ class NJCleaner():
 
 
 
-cleaned = NJCleaner('2018_03.csv')
-cleaned.prep_df('save.csv')
+#cleaned = NJCleaner('2018_03.csv')
+#cleaned.prep_df('save.csv')
 
 
 
