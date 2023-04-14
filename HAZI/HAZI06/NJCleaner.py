@@ -65,7 +65,7 @@ class NJCleaner():
         return droppos
 
     def save_first_60k(self, path):
-        to_print = self.data.loc[:59999, :]
+        to_print = self.data.iloc[:60000]
 
         to_print.to_csv(path, index=False)
 
