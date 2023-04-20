@@ -14,6 +14,7 @@ Készíts egy függvényt, betölti majd vissza adja az iris adathalmazt.
 Egy példa a kimenetre: iris
 return type: sklearn.utils.Bunch
 függvény neve: load_iris_data
+1
 '''
 
 
@@ -21,6 +22,7 @@ def load_iris_data() -> sklearn.utils.Bunch:
     return load_iris()
 
 
+#iris = load_iris_data()
 '''
 Készíts egy függvényt, ami a betölti az virágokhoz tartozó levél méretket egy dataframebe, majd az első 5 sort visszaadja.
 Minden oszlop tartalmazza, hogy az milyen mérethez tartozik.
@@ -28,6 +30,7 @@ Egy példa a bemenetre: iris
 Egy példa a kimenetre: iris_df
 return type: pandas.core.frame.DataFrame
 függvény neve: check_data
+0
 '''
 
 
@@ -36,22 +39,23 @@ def check_data(iris) -> pd.core.frame.DataFrame:
     df = df[["sepal width (cm)", "sepal length (cm)"]]
     return df.head()
 
-
+#print(check_data(iris))
 ''' 
 Készíts egy függvényt ami előkészíti az adatokat egy lineaáris regressziós model feltanításához.
 Featurejeink legyenek a levél méretek kivéve a "sepal length (cm)", ez legyen a targetünk.
 Egy példa a bemenetre: iris
 Egy példa a kimenetre: X, y
 return type: (numpy.ndarray, numpy.ndarray)
+0
 '''
 
 def linear_train_data(iris):
     df = pd.DataFrame(iris.data, columns=iris.feature_names)
-    X = df["sepal width (cm)"].values.reshape(-1, 1)
+    X = df[["sepal width (cm)", "petal width (cm)", "petal length (cm)"]].values.reshape(-1, 3)
     y = df["sepal length (cm)"].values.reshape(-1, 1)
     return X, y
 
-
+#linX, linY = linear_train_data(iris)
 ''' 
 Készíts egy függvényt ami előkészíti az adatokat egy logisztikus regressziós model feltanításához.
 Featurejeink legyenek a levél méretek, targetünk pedig a 0, 1-es virág osztályok.
@@ -59,6 +63,7 @@ Fontos csak azokkal az adatokkal tanítsunk amihez tartozik adott target.
 Egy példa a bemenetre: iris
 Egy példa a kimenetre: X, y
 return type: (numpy.ndarray, numpy.ndarray)
+err
 '''
 
 
@@ -68,9 +73,12 @@ def logistic_train_data(iris):
 
     df.columns = ['sepal_len', 'sepal_wid', 'petal_len', 'petal_wid', 'class']
     X = df[["sepal_wid", "sepal_len"]]
-    y = df.iloc[[df["class"] < 2 & [df["class"] >= 0]], -1]
+    mask = (df["class"] < 2) & (df["class"] >= 0)
+    y_df = df[mask]
+    y = y_df.iloc[:, -1]
     return X, y
 
+#logX, logy = logistic_train_data(iris)
 
 '''
 Készíts egy függvényt ami feldarabolja az adatainkat train és test részre. Az adatok 20%-át használjuk fel a teszteléshez.
@@ -78,6 +86,7 @@ Tegyük determenisztikussá a darabolást, ennek értéke legyen 42.
 Egy példa a bemenetre: X, y
 Egy példa a kimenetre: X_train, X_test, y_train, y_test
 return type: (numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray)
+1
 '''
 
 
@@ -85,12 +94,14 @@ def split_data(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     return X_train, X_test, y_train, y_test
 
-
+#X_train, X_test, y_train, y_test = split_data(linX, linY)
+#X_train, X_test, y_train, y_test = split_data(logX, logy)
 '''
 Készíts egy függvényt ami feltanít egy lineaáris regressziós modelt, majd visszatér vele.
 Egy példa a bemenetre: X_train, y_train
 Egy példa a kimenetre: model
 return type: sklearn.linear_model._base.LinearRegression
+1
 '''
 
 
@@ -105,11 +116,12 @@ Készíts egy függvényt ami feltanít egy logisztikus regressziós modelt, maj
 Egy példa a bemenetre: X_train, y_train
 Egy példa a kimenetre: model
 return type: sklearn.linear_model._base.LogisticRegression
+0
 '''
 
 
-def train_logistic_regression(X_train,y_train)->LogisticRegression:
-    lr = LinearRegression()
+def train_logistic_regression(X_train, y_train) -> LogisticRegression:
+    lr = LogisticRegression()
     lr.fit(X_train, y_train)
     return lr
 
@@ -119,6 +131,7 @@ Készíts egy függvényt, ami a feltanított modellel predikciót tud végre ha
 Egy példa a bemenetre: model, X_test
 Egy példa a kimenetre: y_pred
 return type: numpy.ndarray
+1
 '''
 
 
@@ -138,6 +151,7 @@ Az y tengely címe legyen: 'Predicted'
 Egy példa a bemenetre: y_test, y_pred
 Egy példa a kimenetre: scatter plot
 return type: matplotlib.figure.Figure
+1
 '''
 
 
@@ -155,6 +169,7 @@ Készíts egy függvényt, ami a Négyzetes hiba (MSE) értékét számolja ki a
 Egy példa a bemenetre: y_test, y_pred
 Egy példa a kimenetre: mse
 return type: float
+1
 '''
 
 
