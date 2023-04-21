@@ -22,7 +22,7 @@ def load_iris_data() -> sklearn.utils.Bunch:
     return load_iris()
 
 
-iris = load_iris_data()
+#iris = load_iris_data()
 '''
 Készíts egy függvényt, ami a betölti az virágokhoz tartozó levél méretket egy dataframebe, majd az első 5 sort visszaadja.
 Minden oszlop tartalmazza, hogy az milyen mérethez tartozik.
@@ -55,7 +55,7 @@ def linear_train_data(iris):
     y = df["sepal length (cm)"]
     return X, y
 
-linX, linY = linear_train_data(iris)
+#linX, linY = linear_train_data(iris)
 
 ''' 
 Készíts egy függvényt ami előkészíti az adatokat egy logisztikus regressziós model feltanításához.
