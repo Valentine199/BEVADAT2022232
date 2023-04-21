@@ -22,7 +22,7 @@ def load_iris_data() -> sklearn.utils.Bunch:
     return load_iris()
 
 
-#iris = load_iris_data()
+iris = load_iris_data()
 '''
 Készíts egy függvényt, ami a betölti az virágokhoz tartozó levél méretket egy dataframebe, majd az első 5 sort visszaadja.
 Minden oszlop tartalmazza, hogy az milyen mérethez tartozik.
@@ -36,7 +36,7 @@ függvény neve: check_data
 
 def check_data(iris) -> pd.core.frame.DataFrame:
     df = pd.DataFrame(iris.data, columns=iris.feature_names)
-    df = df[["sepal width (cm)", "sepal length (cm)"]]
+    df = df[["sepal width (cm)", "sepal length (cm)", "petal width (cm)", "petal length (cm)"]]
     return df.head()
 
 #print(check_data(iris))
@@ -51,11 +51,12 @@ return type: (numpy.ndarray, numpy.ndarray)
 
 def linear_train_data(iris):
     df = pd.DataFrame(iris.data, columns=iris.feature_names)
-    X = df[["sepal width (cm)", "petal width (cm)", "petal length (cm)"]].values.reshape(-1, 3)
-    y = df["sepal length (cm)"].values.reshape(-1, 1)
+    X = df[["sepal width (cm)", "petal width (cm)", "petal length (cm)"]]
+    y = df["sepal length (cm)"]
     return X, y
 
-#linX, linY = linear_train_data(iris)
+linX, linY = linear_train_data(iris)
+
 ''' 
 Készíts egy függvényt ami előkészíti az adatokat egy logisztikus regressziós model feltanításához.
 Featurejeink legyenek a levél méretek, targetünk pedig a 0, 1-es virág osztályok.
