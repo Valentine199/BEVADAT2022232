@@ -22,7 +22,7 @@ def load_iris_data() -> sklearn.utils.Bunch:
     return load_iris()
 
 
-#iris = load_iris_data()
+iris = load_iris_data()
 #print(iris)
 '''
 Készíts egy függvényt, ami a betölti az virágokhoz tartozó levél méretket egy dataframebe, majd az első 5 sort visszaadja.
@@ -31,7 +31,7 @@ Egy példa a bemenetre: iris
 Egy példa a kimenetre: iris_df
 return type: pandas.core.frame.DataFrame
 függvény neve: check_data
-0
+1
 '''
 
 
@@ -46,7 +46,7 @@ Featurejeink legyenek a levél méretek kivéve a "sepal length (cm)", ez legyen
 Egy példa a bemenetre: iris
 Egy példa a kimenetre: X, y
 return type: (numpy.ndarray, numpy.ndarray)
-0
+1
 '''
 
 def linear_train_data(iris):
@@ -55,7 +55,7 @@ def linear_train_data(iris):
     y = df["sepal length (cm)"]
     return X, y
 
-#linX, linY = linear_train_data(iris)
+linX, linY = linear_train_data(iris)
 
 ''' 
 Készíts egy függvényt ami előkészíti az adatokat egy logisztikus regressziós model feltanításához.
@@ -70,11 +70,12 @@ return type: (numpy.ndarray, numpy.ndarray)
 
 def logistic_train_data(iris):
     df = pd.DataFrame(iris.data)
-    df['Species'] = iris.target
+    df['target'] = iris.target
+    df= df[df['target'].notna()]
 
-    df.columns = ["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)", 'Species']
+    df.columns = ["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)", 'target']
     X = df[["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)"]]
-    mask = (df["Species"] < 2) & (df["Species"] >= 0)
+    mask = (df["target"] < 2) & (df["target"] >= 0)
     y_df = df[mask]
     y = y_df.iloc[:, -1]
     return X, y
