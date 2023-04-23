@@ -69,15 +69,11 @@ return type: (numpy.ndarray, numpy.ndarray)
 
 
 def logistic_train_data(iris):
-    df = pd.DataFrame(iris.data)
+    df = pd.DataFrame(iris.data, columns=iris.feature_names)
     df['target'] = iris.target
-    df= df[df['target'].notna()]
-
-    df.columns = ["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)", 'target']
-    X = df[["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)"]]
-    mask = (df["target"] < 2) & (df["target"] >= 0)
-    y_df = df[mask]
-    y = y_df.iloc[:, -1]
+    df.drop(df.loc[df['target'] == 2].index, inplace=True)
+    y = df['target']
+    X = df[['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']].values
     return X, y
 
 #logX, logy = logistic_train_data(iris)
