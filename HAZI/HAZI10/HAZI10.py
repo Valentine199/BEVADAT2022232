@@ -23,7 +23,7 @@ def mnist_digit_data():
   train_images = train_images /255.0
   test_images = test_images /255.0
 
-  return train_images, train_labels, test_images, test_labels
+  return (train_images, train_labels), (test_images, test_labels)
 
 '''
 Készíts egy neurális hálót, ami képes felismerni a kézírásos számokat.
@@ -40,8 +40,11 @@ def mnist_model() -> tf.keras.Sequential:
   model = tf.keras.Sequential([
       tf.keras.layers.Flatten(input_shape=(28, 28)),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax')
+    tf.keras.layers.Dense(10)
   ])
+
+  model = tf.keras.Sequential([model,
+                       tf.keras.layers.Softmax()])
   return model
 
 '''
@@ -58,7 +61,7 @@ függvény neve: model_compile
 def model_compile(model: tf.keras.Sequential) -> tf.keras.Sequential:
   model.compile(
       optimizer='adam',
-      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+      loss=tf.keras.losses.SparseCategoricalCrossentropy()
   )
   return model
 
@@ -88,12 +91,12 @@ def model_evaluate(model: tf.keras.Sequential, test_images, test_labels):
   test_loss = model.evaluate(test_images,  test_labels)
   return test_loss
 
-train_images, train_labels, test_images, test_labels = mnist_digit_data()
-model = mnist_model()
-model = model_compile(model)
-model = model_compile(model)
-model = model_fit(model, 10, train_images, train_labels)
+#(train_images, train_labels), (test_images, test_labels) = mnist_digit_data()
+#model = mnist_model()
+#model = model_compile(model)
+#model = model_compile(model)
+#model = model_fit(model, 10, train_images, train_labels)
 
-test_loss = model.evaluate(model, test_images, test_labels)
+#test_loss = model.evaluate(model, test_images, test_labels)
 
-print("loss:", test_loss)
+#print("loss:", test_loss)
