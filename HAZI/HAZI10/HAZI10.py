@@ -15,8 +15,8 @@ def mnist_digit_data():
   x_train = x_train.astype("float32") / 255
   x_test = x_test.astype("float32") / 255
 
-  y_train = y_train.astype("float32")
-  y_test = y_test.astype("float32")
+  y_train = y_train.astype("float32") / 255
+  y_test = y_test.astype("float32") / 255
 
   return x_train, y_train, x_test, y_test
 
