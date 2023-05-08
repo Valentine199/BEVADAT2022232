@@ -12,8 +12,11 @@ függvény neve: mnist_digit_data
 
 def mnist_digit_data():
   (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-  x_train = x_train / 255.0
-  x_test = x_test / 255.0
+  x_train = x_train.astype("float32") / 255.0
+  x_test = x_test.astype("float32") / 255.0
+
+  #y_train = y_train.astype("float32") / 255.0
+  #y_test = y_test.astype("float32") / 255.0
 
   return x_train, y_train, x_test, y_test
 
@@ -84,13 +87,13 @@ def model_evaluate(model: tf.keras.Sequential, test_images, test_labels):
   test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
   return test_loss, test_acc
 
-#train_images, train_labels, test_images, test_labels = mnist_digit_data()
-#model = mnist_model()
-#model = model_compile(model)
-#model = model_compile(model)
-#model = model_fit(model, 10, train_images, train_labels)
+train_images, train_labels, test_images, test_labels = mnist_digit_data()
+model = mnist_model()
+model = model_compile(model)
+model = model_compile(model)
+model = model_fit(model, 10, train_images, train_labels)
 
-#test_loss, test_acc = model_evaluate(model, test_images, test_labels)
+test_loss, test_acc = model_evaluate(model, test_images, test_labels)
 
-#print("loss:", test_loss)
-#print("acc:", test_acc)
+print("loss:", test_loss)
+print("acc:", test_acc)
